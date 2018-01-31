@@ -1,6 +1,6 @@
 <#PSScriptInfo
 
-.VERSION 1.0.0
+.VERSION 1.0.1
 
 .GUID 52f620ce-6560-42d9-afac-d1124aa65d1c
 
@@ -30,6 +30,7 @@ https://shanehoey.github.io/ccedesigndoc
 #> 
 
 #Requires -Module WordDoc
+
 
 
 
@@ -147,7 +148,7 @@ Param(
 # If you want to silence the notice set notify to $false rather than deleting the section
 # thank in advance
 $notify = $true #$false if you do not want to be notified of updates. 
-$thisversion = "dd03ca2e-6806-49e9-8f71-be6ba2407b8e"
+$thisversion = "d5a1c799-b160-47a1-bfcf-2dbe5562dd84"
 $Version = (Invoke-WebRequest -Uri https://raw.githubusercontent.com/shanehoey/versions/master/ccedesigndoc.json -UserAgent cceDesignDoc -Method Get -DisableKeepAlive -TimeoutSec 2).content | convertfrom-json
 if (($thisversion -ne $version.release) -and ($thisversion -ne $version.dev)) {
     Write-Verbose -message "cceDesignDoc has been updated" -Verbose
