@@ -47,7 +47,5 @@ When you run cceDesignDoc it will prompt you for the following
 ### Credit and Thanks ###
 Massive thanks to the following people for blog there own scripts that have helped me write this module
 
-* Oliver Lipkau - https://blogs.technet.microsoft.com/heyscriptingguy/2011/08/20/use-powershell-to-work-with-any-ini-file/
+* [Oliver Lipkau](https://blogs.technet.microsoft.com/heyscriptingguy/2011/08/20/use-powershell-to-work-with-any-ini-file/)
 
-### License ###
-refer to license.txt
