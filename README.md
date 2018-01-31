@@ -12,7 +12,7 @@ Quickly and effortless create a Skype for Business Cloud Connector Eddition (CCE
 ### Important Prerequisites ###
 Before attempting to use this module make sure you install the WordDoc Module
 
-[WordDoc](https://shanehoey.github.io/shanehoey/wordDoc/)
+[WordDoc](https://shanehoey.github.io/worddoc/)
 
 ### Installation ###
 Option 1 Install from PowerShell Gallery 
