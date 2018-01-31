@@ -6,7 +6,7 @@ $NuGetApiKey
 $cert = Get-ChildItem Cert:\CurrentUser\My -CodeSigningCert
 $cert | format-table subject,issuer
 
-$version = "1.0.0"
+$version = "1.0.1"
 
 Update-ScriptFileInfo -Path ".\ccedesigndoc\ccedesigndoc.ps1" -Version $version -Guid "52f620ce-6560-42d9-afac-d1124aa65d1c" -Author "Shane Hoey" -Copyright "2016-2018 Shane Hoey" `
                         -RequiredModules WordDoc -ProjectUri https://shanehoey.github.io/ccedesigndoc -ReleaseNotes https://shanehoey.github.io/ccedesigndoc `

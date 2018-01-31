@@ -87,59 +87,56 @@ Param(
 )
 
 #region File Variables
-if ($PSBoundParameters.ContainsKey('CloudConnectorFile')) 
-    {
-        $CloudConnectorFile = (get-item -path $CloudConnectorFile).fullname
-    }    
-else
-    { 
-        Add-Type -AssemblyName System.windows.forms
-        $OpenFileDialog = New-Object -TypeName System.Windows.Forms.OpenFileDialog
-        $OpenFileDialog.initialDirectory =  [Environment]::GetFolderPath('MyDocuments')
-        $OpenFileDialog.filter = 'CloudConnector.ini (*.ini)|*.ini'
-        $OpenFileDialog.title = 'Select cloudconnector.ini to import'
-        $OpenFileDialog.ShowHelp = $True
-        [void]$OpenFileDialog.ShowDialog()
-        $CloudConnectorFile = $OpenFileDialog.filename
-        Remove-Variable -Name OpenFileDialog
-    }
+    if ($PSBoundParameters.ContainsKey('CloudConnectorFile')) 
+        {
+            $CloudConnectorFile = (get-item -path $CloudConnectorFile).fullname
+        }    
+    else
+        { 
+            Add-Type -AssemblyName System.windows.forms
+            $OpenFileDialog = New-Object -TypeName System.Windows.Forms.OpenFileDialog
+            $OpenFileDialog.initialDirectory =  [Environment]::GetFolderPath('MyDocuments')
+            $OpenFileDialog.filter = 'CloudConnector.ini (*.ini)|*.ini'
+            $OpenFileDialog.title = 'Select cloudconnector.ini to import'
+            $OpenFileDialog.ShowHelp = $True
+            [void]$OpenFileDialog.ShowDialog()
+            $CloudConnectorFile = $OpenFileDialog.filename
+            Remove-Variable -Name OpenFileDialog
+        }
+    Write-Verbose -message $CloudConnectorFile
 
-Write-Verbose -message $CloudConnectorFile
+    if ($PSBoundParameters.ContainsKey('TemplateFile')) 
+        {
+            $Template = (get-item -path $TemplateFile).fullname
+        }    
+    else
+        { 
+            Add-Type -AssemblyName System.windows.forms 
+            $OpenFileDialog = New-Object -TypeName System.Windows.Forms.OpenFileDialog
+            $OpenFileDialog.initialDirectory =  [Environment]::GetFolderPath('MyDocuments')
+            $OpenFileDialog.filter = 'Word Document (*.docx)|*.docx|Word Template (*.dotx)|*.dotx'
+            $OpenFileDialog.title = 'Select Word Template to import'
+            [void]$OpenFileDialog.ShowDialog()
+            $TemplateFile = $OpenFileDialog.filename
+            Remove-Variable -Name OpenFileDialog
+        }
+    Write-Verbose -message $TemplateFile
 
-if ($PSBoundParameters.ContainsKey('TemplateFile')) 
-    {
-        $Template = (get-item -path $TemplateFile).fullname
-    }    
-else
-    { 
-        Add-Type -AssemblyName System.windows.forms 
-        $OpenFileDialog = New-Object -TypeName System.Windows.Forms.OpenFileDialog
-        $OpenFileDialog.initialDirectory =  [Environment]::GetFolderPath('MyDocuments')
-        $OpenFileDialog.filter = 'Word Document (*.docx)|*.docx|Word Template (*.dotx)|*.dotx'
-        $OpenFileDialog.title = 'Select Word Template to import'
-        [void]$OpenFileDialog.ShowDialog()
-        $TemplateFile = $OpenFileDialog.filename
-        Remove-Variable -Name OpenFileDialog
-    }
-
-Write-Verbose -message $TemplateFile
-
-if ($PSBoundParameters.ContainsKey('SaveAsFile')) 
-    {
-        $SaveAsFile = [System.IO.Path]::GetFullPath($SaveAsFile)
-    }
-else    
-    {     
-        $SaveFileDialog = New-Object -TypeName System.Windows.Forms.saveFileDialog
-        $SaveFileDialog.InitialDirectory = [Environment]::GetFolderPath('MyDocuments')
-        $SaveFileDialog.filter = 'Word Document (*.docx)|*.docx|HTML File (*.html)|*.html|PDF (*.pdf)|*.pdf'
-        $SaveFileDialog.title = "Save As:"
-        [void]$SaveFileDialog.ShowDialog()
-        $SaveAsFile = $SaveFileDialog.FileName
-        remove-variable -Name SaveFileDialog
-    }
-
-Write-Verbose -message $SaveAsFile
+    if ($PSBoundParameters.ContainsKey('SaveAsFile')) 
+        {
+            $SaveAsFile = [System.IO.Path]::GetFullPath($SaveAsFile)
+        }
+    else    
+        {     
+            $SaveFileDialog = New-Object -TypeName System.Windows.Forms.saveFileDialog
+            $SaveFileDialog.InitialDirectory = [Environment]::GetFolderPath('MyDocuments')
+            $SaveFileDialog.filter = 'Word Document (*.docx)|*.docx|HTML File (*.html)|*.html|PDF (*.pdf)|*.pdf'
+            $SaveFileDialog.title = "Save As:"
+            [void]$SaveFileDialog.ShowDialog()
+            $SaveAsFile = $SaveFileDialog.FileName
+            remove-variable -Name SaveFileDialog
+        }
+    Write-Verbose -message $SaveAsFile
 #endregion
 
 #region Version Control & 14 Day usage stats
@@ -166,39 +163,41 @@ if (($thisversion -ne $version.release) -and ($thisversion -ne $version.dev)) {
 . .\pscustomobjects.ps1
 
 #region Create Word Document 
-New-WordInstance
-New-WordDocument
+    New-WordInstance
+    New-WordDocument
 #endregion 
 
 #region Apply Template or CoverPage
-if ($TemplateFile -eq "") { 
-    Add-WordCoverPage -CoverPage Facet
-    Add-WordBreak -breaktype NewPage
-}
-else {
-    Add-WordTemplate -filename $TemplateFile
-    Add-WordBreak -breaktype Paragraph
-    Add-WordBreak -breaktype Paragraph
-    Add-WordBreak -breaktype Paragraph
-    Add-WordText -text "Cloud Connector Implementation Design " -WDBuiltinStyle wdStyleTitle
-    Add-WordBreak -breaktype Paragraph
-    Add-WordBreak -breaktype Paragraph
-    Add-WordBreak -breaktype Paragraph
-    Add-WordText -text "for" -WDBuiltinStyle wdStyleTitle
-    Add-WordBreak -breaktype Paragraph
-    Add-WordBreak -breaktype Paragraph
-    Add-WordBreak -breaktype Paragraph
-    Add-WordText -text "CustomerName" -WDBuiltinStyle wdStyleTitle
-    Add-WordBreak -breaktype NewPage
-}
+    if ($TemplateFile -eq "") 
+    { 
+        Add-WordCoverPage -CoverPage Facet
+        Add-WordBreak -breaktype NewPage
+    }
+    else 
+    {
+        Add-WordTemplate -filename $TemplateFile
+        Add-WordBreak -breaktype Paragraph
+        Add-WordBreak -breaktype Paragraph
+        Add-WordBreak -breaktype Paragraph
+        Add-WordText -text "Cloud Connector Implementation Design " -WDBuiltinStyle wdStyleTitle
+        Add-WordBreak -breaktype Paragraph
+        Add-WordBreak -breaktype Paragraph
+        Add-WordBreak -breaktype Paragraph
+        Add-WordText -text "for" -WDBuiltinStyle wdStyleTitle
+        Add-WordBreak -breaktype Paragraph
+        Add-WordBreak -breaktype Paragraph
+        Add-WordBreak -breaktype Paragraph
+        Add-WordText -text "CustomerName" -WDBuiltinStyle wdStyleTitle
+        Add-WordBreak -breaktype NewPage
+    }
 #endregion
 
 #region update document settings
-Set-WordBuiltInProperty -WdBuiltInProperty wdPropertytitle "cceDesignDoc"
-Set-WordBuiltInProperty -WdBuiltInProperty wdPropertySubject "Cloud Connector Implementation"
-Set-WordBuiltInProperty -WdBuiltInProperty wdPropertyAuthor $([Text.Encoding]::Unicode.GetString([Convert]::FromBase64String('cwBoAGEAbgBlAGgAbwBlAHkA')))
-Set-WordBuiltInProperty -WdBuiltInProperty wdPropertyComments $([Text.Encoding]::Unicode.GetString([Convert]::FromBase64String('aAB0AHQAcABzADoALwAvAHMAaABhAG4AZQBoAG8AZQB5AC4AZwBpAHQAaAB1AGIALgBpAG8ALwB3AG8AcgBkAGQAbwBjAC8AYwBjAGUARABlAHMAaQBnAG4ARABvAGMA')))
-Set-WordBuiltInProperty -WdBuiltInProperty wdPropertyManager $([Text.Encoding]::Unicode.GetString([Convert]::FromBase64String('cwBoAGEAbgBlAGgAbwBlAHkA')))
+    Set-WordBuiltInProperty -WdBuiltInProperty wdPropertytitle "cceDesignDoc"
+    Set-WordBuiltInProperty -WdBuiltInProperty wdPropertySubject "Cloud Connector Implementation"
+    Set-WordBuiltInProperty -WdBuiltInProperty wdPropertyAuthor $([Text.Encoding]::Unicode.GetString([Convert]::FromBase64String('cwBoAGEAbgBlAGgAbwBlAHkA')))
+    Set-WordBuiltInProperty -WdBuiltInProperty wdPropertyComments $([Text.Encoding]::Unicode.GetString([Convert]::FromBase64String('aAB0AHQAcABzADoALwAvAHMAaABhAG4AZQBoAG8AZQB5AC4AZwBpAHQAaAB1AGIALgBpAG8ALwB3AG8AcgBkAGQAbwBjAC8AYwBjAGUARABlAHMAaQBnAG4ARABvAGMA')))
+    Set-WordBuiltInProperty -WdBuiltInProperty wdPropertyManager $([Text.Encoding]::Unicode.GetString([Convert]::FromBase64String('cwBoAGEAbgBlAGgAbwBlAHkA')))
 #endregion
 
 #region License
@@ -226,44 +225,44 @@ Add-WordBreak -breaktype NewPage
 #endregion
 
 #region Add TOC
-Add-WordBreak -breaktype Paragraph
-Add-WordText -text 'Table of Contents' -WDBuiltinStyle wdStyleTitle
-Add-WordTOC 
-Add-WordBreak -breaktype NewPage 
+    Add-WordBreak -breaktype Paragraph
+    Add-WordText -text 'Table of Contents' -WDBuiltinStyle wdStyleTitle
+    Add-WordTOC 
+    Add-WordBreak -breaktype NewPage 
 #endregion 
 
 #region Overview
-Add-WordText -text "Overview" -WDBuiltinStyle wdStyleHeading1 
-Add-WordBreak -breaktype Paragraph  
-Add-WordText -text $textOverview -WDBuiltinStyle wdStyleBodyText 
-Add-WordBreak -breaktype Paragraph 
+    Add-WordText -text "Overview" -WDBuiltinStyle wdStyleHeading1 
+    Add-WordBreak -breaktype Paragraph  
+    Add-WordText -text $textOverview -WDBuiltinStyle wdStyleBodyText 
+    Add-WordBreak -breaktype Paragraph 
 #endregion
 
 #region Supporting Documents
-Add-WordText -text "Supporting Documentation" -WDBuiltinStyle  wdStyleHeading1
-Add-WordText -text "The following supporting documentation should be used as a reference when reading this high Level this Design Document" -WDBuiltinStyle wdStyleBodyText
-Add-WordBreak -breaktype Paragraph
-foreach ($object in $objectRelatedDocuments) { 
-    [void](Get-WordDocument).Hyperlinks.Add((Get-WordDocument).application.selection.range,$object.DocumentLink,$null,$null,$object.DocumentName)
+    Add-WordText -text "Supporting Documentation" -WDBuiltinStyle  wdStyleHeading1
+    Add-WordText -text "The following supporting documentation should be used as a reference when reading this high Level this Design Document" -WDBuiltinStyle wdStyleBodyText
     Add-WordBreak -breaktype Paragraph
-}
-Add-WordBreak -breaktype NewPage
+    foreach ($object in $objectRelatedDocuments)
+    { 
+        [void](Get-WordDocument).Hyperlinks.Add((Get-WordDocument).application.selection.range,$object.DocumentLink,$null,$null,$object.DocumentName)
+        Add-WordBreak -breaktype Paragraph
+    }
+    Add-WordBreak -breaktype NewPage
 #endregion
 
 #region Cloud Connector Design 
-Add-WordText -text "Cloud Connector Design " -WDBuiltinStyle wdStyleHeading1 
-Add-WordBreak -breaktype Paragraph
-Add-WordText -text $textDesign
-
-
-#Bullets not yet done so need to manually create it 
-$selection = (Get-WordDocument).application.selection
-$selection.range.ListFormat.ApplyBulletDefault()
-foreach ($object in $Listdesign) {
-    $selection.typetext($object)
-    $Selection.TypeParagraph()
-}
-$selection.range.ListFormat.ApplyBulletDefault()
+    Add-WordText -text "Cloud Connector Design " -WDBuiltinStyle wdStyleHeading1 
+    Add-WordBreak -breaktype Paragraph
+    Add-WordText -text $textDesign
+    #Bullets not yet done so need to manually create it 
+    $selection = (Get-WordDocument).application.selection
+    $selection.range.ListFormat.ApplyBulletDefault()
+    foreach ($object in $Listdesign) 
+    {
+        $selection.typetext($object)
+        $Selection.TypeParagraph()
+    }
+    $selection.range.ListFormat.ApplyBulletDefault()
 #endregion 
 
 #region Cloud Connector PlatForm 
